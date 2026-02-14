@@ -7,9 +7,18 @@ import * as THREE from 'three';
 const Stars = (props: any) => {
     const ref = useRef<any>();
     const [sphere] = useMemo(() => {
-        // Generate random points in a sphere - Increased radius and count
-        const points = random.inSphere(new Float32Array(8000), { radius: 2 });
-        return [points];
+        try {
+            // Generate random points in a sphere
+            const positions = random.inSphere(new Float32Array(8000), { radius: 2 }) as Float32Array;
+            // Validate that we don't have NaN values which crash Three.js
+            for (let i = 0; i < positions.length; i++) {
+                if (isNaN(positions[i])) positions[i] = 0;
+            }
+            return [positions];
+        } catch (e) {
+            console.error("Error generating stars:", e);
+            return [new Float32Array(8000).fill(0)];
+        }
     }, []);
 
     useFrame((state, delta) => {
