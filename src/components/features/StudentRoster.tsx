@@ -73,7 +73,12 @@ const StudentRoster = () => {
 
                     <div className="w-24 h-24 rounded-full bg-zinc-900 overflow-hidden border-2 border-primary/50 mb-6 shadow-[0_0_20px_rgba(0,255,0,0.2)] group-hover:shadow-[0_0_30px_rgba(0,255,0,0.5)] transition-all" style={{ transform: 'translateZ(50px)' }}>
                       {student.avatar_url ? (
-                        <img src={student.avatar_url} alt={student.nickname} className="w-full h-full object-cover" />
+                        <img
+                          src={student.avatar_url}
+                          alt={student.nickname}
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                        />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
                           <Icon className="w-10 h-10 text-muted-foreground" />

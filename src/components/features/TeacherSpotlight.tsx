@@ -13,23 +13,8 @@ const TeacherSpotlight = () => {
     offset: ["start end", "end start"],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
-  const rotateX = useTransform(scrollYProgress, [0, 1], [10, -10]);
-
-  // Holographic Tilt
-  const x = useMotionValue(0);
-  const yTilt = useMotionValue(0);
-  const mouseX = useSpring(x, { stiffness: 500, damping: 100 });
-  const mouseY = useSpring(yTilt, { stiffness: 500, damping: 100 });
-
-  function handleMouseMove({ currentTarget, clientX, clientY }: React.MouseEvent) {
-    const { left, top, width, height } = currentTarget.getBoundingClientRect();
-    x.set(clientX - left - width / 2);
-    yTilt.set(clientY - top - height / 2);
-  }
-
-  const rotateYCard = useTransform(mouseX, [-300, 300], [-10, 10]);
-  const rotateXCard = useTransform(mouseY, [-300, 300], [10, -10]);
+  const y = useTransform(scrollYProgress, [0, 1], [50, -50]); // Reduced range for subtle perf
+  const rotateX = useTransform(scrollYProgress, [0, 1], [5, -5]);
 
   return (
     <section

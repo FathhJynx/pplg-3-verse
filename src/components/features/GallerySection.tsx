@@ -78,7 +78,7 @@ const GallerySection = () => {
 
                         <div className="relative w-full h-full flex flex-col md:flex-row">
                             <div className="flex-1 relative bg-black/50 flex items-center justify-center p-4">
-                                <img src={selectedImage.image_url} alt={selectedImage.title} className="max-w-full max-h-[80vh] object-contain shadow-2xl" />
+                                <img src={selectedImage.image_url} alt={selectedImage.title} className="max-w-full max-h-[80vh] object-contain shadow-2xl" loading="lazy" />
                             </div>
 
                             <div className="w-full md:w-80 bg-zinc-950 p-8 border-l border-white/10 flex flex-col justify-center">
@@ -122,6 +122,7 @@ const GalleryCard = ({ item, index, onClick }: { item: GalleryItem, index: numbe
                         src={item.image_url}
                         alt={item.title}
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 group-hover:grayscale-0 grayscale-[50%]"
+                        loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 

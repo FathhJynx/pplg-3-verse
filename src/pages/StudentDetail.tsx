@@ -83,7 +83,12 @@ const StudentDetail = () => {
                             className="relative aspect-square rounded-2xl overflow-hidden border border-white/10 bg-zinc-900 group"
                         >
                             {student.avatar_url ? (
-                                <img src={student.avatar_url} alt={student.nickname} className="w-full h-full object-cover" />
+                                <img
+                                    src={student.avatar_url}
+                                    alt={student.nickname}
+                                    className="w-full h-full object-cover"
+                                    loading="lazy"
+                                />
                             ) : (
                                 <div className="w-full h-full flex items-center justify-center">
                                     <Icon className="w-32 h-32 text-white/10" />

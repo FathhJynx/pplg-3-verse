@@ -1,5 +1,6 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useSpring, animated } from '@react-spring/web';
+import { useInView } from 'framer-motion';
 
 interface TiltCardProps {
     children: React.ReactNode;
@@ -12,14 +13,17 @@ const TiltCard: React.FC<TiltCardProps> = ({ children, className = '', onClick }
     const [isHovered, setIsHovered] = useState(false);
     const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
 
+    // Performance optimization: only compute when in view
+    const isInView = useInView(ref, { once: false, amount: 0.1 });
+
     // Define the spring using the hook
     const [props, api] = useSpring(() => ({
         xys: [0, 0, 1],
-        config: { mass: 1, tension: 350, friction: 30 }, // Slightly less friction for more "alive" feel
+        config: { mass: 1, tension: 280, friction: 60 }, // optimized for smoother perf
     }));
 
     const calc = (x: number, y: number) => {
-        if (!ref.current) return [0, 0, 1];
+        if (!ref.current || !isInView) return [0, 0, 1];
         const rect = ref.current.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
@@ -29,13 +33,14 @@ const TiltCard: React.FC<TiltCardProps> = ({ children, className = '', onClick }
         const py = ((y - rect.top) / rect.height) * 100;
         setMousePos({ x: px, y: py });
 
-        return [-(y - centerY) / 12, (x - centerX) / 12, 1.05]; // Increased tilt sensitivity
+        return [-(y - centerY) / 15, (x - centerX) / 15, 1.05];
     };
 
     const trans = (x: number, y: number, s: number) =>
-        `perspective(1000px) rotateX(${x}deg) rotateY(${y}deg) scale(${s})`; // Increased perspective depth
+        `perspective(1000px) rotateX(${x}deg) rotateY(${y}deg) scale(${s})`;
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!isInView) return;
         if (!isHovered) setIsHovered(true);
         const { clientX: x, clientY: y } = e;
         api.start({ xys: calc(x, y) });
@@ -47,12 +52,14 @@ const TiltCard: React.FC<TiltCardProps> = ({ children, className = '', onClick }
     };
 
     const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+        if (!isInView) return;
         setIsHovered(true);
         const touch = e.touches[0];
         api.start({ xys: calc(touch.clientX, touch.clientY) });
     };
 
     const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+        if (!isInView) return;
         const touch = e.touches[0];
         api.start({ xys: calc(touch.clientX, touch.clientY) });
     };
@@ -65,7 +72,7 @@ const TiltCard: React.FC<TiltCardProps> = ({ children, className = '', onClick }
     return (
         <animated.div
             ref={ref}
-            className={`relative transition-all duration-300 ${className}`}
+            className={`relative transition-all duration-300 ${className} ${!isInView ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
             onTouchStart={handleTouchStart}
@@ -76,27 +83,29 @@ const TiltCard: React.FC<TiltCardProps> = ({ children, className = '', onClick }
                 transform: props.xys.to(trans),
                 zIndex: isHovered ? 50 : 1,
                 transformStyle: 'preserve-3d',
+                willChange: 'transform' // hint for browser optimization
             }}
         >
-            {children}
-            {/* Dynamic Glare effect */}
-            <div
-                className="absolute inset-0 w-full h-full pointer-events-none transition-opacity duration-300 rounded-[inherit]"
-                style={{
-                    background: `radial-gradient(circle at ${mousePos.x}% ${mousePos.y}%, rgba(255, 255, 255, 0.15) 0%, transparent 60%)`,
-                    opacity: isHovered ? 1 : 0,
-                    mixBlendMode: 'overlay',
-                }}
-            />
-            {/* Additional holographic shimmer */}
-            <div
-                className="absolute inset-0 w-full h-full pointer-events-none transition-opacity duration-500 rounded-[inherit]"
-                style={{
-                    background: `linear-gradient(${mousePos.x + mousePos.y}deg, transparent 0%, rgba(0, 243, 255, 0.05) 50%, transparent 100%)`,
-                    opacity: isHovered ? 0.5 : 0,
-                    mixBlendMode: 'screen',
-                }}
-            />
+            {isInView && children}
+            {/* Dynamic Glare effect - only rendered when hovered */}
+            {isHovered && (
+                <>
+                    <div
+                        className="absolute inset-0 w-full h-full pointer-events-none rounded-[inherit]"
+                        style={{
+                            background: `radial-gradient(circle at ${mousePos.x}% ${mousePos.y}%, rgba(255, 255, 255, 0.1) 0%, transparent 60%)`,
+                            mixBlendMode: 'overlay',
+                        }}
+                    />
+                    <div
+                        className="absolute inset-0 w-full h-full pointer-events-none rounded-[inherit]"
+                        style={{
+                            background: `linear-gradient(${mousePos.x + mousePos.y}deg, transparent 0%, rgba(0, 243, 255, 0.05) 50%, transparent 100%)`,
+                            mixBlendMode: 'screen',
+                        }}
+                    />
+                </>
+            )}
         </animated.div>
     );
 };
