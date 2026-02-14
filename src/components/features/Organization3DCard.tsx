@@ -93,6 +93,8 @@ const Organization3DCard = ({ role, isActive, onClick }: Organization3DCardProps
                     rotateX: isActive ? 0 : rotateX,
                     rotateY: isActive ? 0 : rotateY,
                     transformStyle: "preserve-3d",
+                    willChange: 'transform',
+                    backfaceVisibility: 'hidden'
                 }}
                 className={`w-64 sm:w-72 h-[22rem] sm:h-96 relative bg-card border-2 ${styles.border} ${isActive ? styles.glow : ""} rounded-xl backdrop-blur-sm transition-colors duration-300`}
                 animate={{

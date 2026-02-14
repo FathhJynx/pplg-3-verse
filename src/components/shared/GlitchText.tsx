@@ -15,6 +15,7 @@ const GlitchText = ({ text, className = "", as = "span" }: GlitchTextProps) => {
       <Component
         className="relative z-10"
         initial={{ opacity: 1 }}
+        style={{ willChange: 'transform', backfaceVisibility: 'hidden' }}
         animate={{
           x: [0, -2, 2, -1, 1, 0],
           transition: {

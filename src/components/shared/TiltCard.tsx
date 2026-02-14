@@ -84,7 +84,8 @@ const TiltCard: React.FC<TiltCardProps> = ({ children, className = '', onClick }
                 zIndex: isHovered ? 50 : 1,
                 transformStyle: 'preserve-3d',
                 willChange: 'transform',
-                transition: 'opacity 0.3s ease, transform 0.1s ease' // more specific than transition-all
+                backfaceVisibility: 'hidden', // optimization for 3D rotations
+                transition: 'opacity 0.3s ease' // remove transform from CSS transition as spring handles it
             }}
         >
             {children}
