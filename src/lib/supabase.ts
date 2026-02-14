@@ -3,10 +3,22 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseKey) {
-    console.warn('CRITICAL: Supabase Environment Variables are missing. Backend features will be disabled. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your deployment environment.');
-}
+// Safe initialization to prevent hard-crash on missing env vars
+const getSupabaseClient = () => {
+    if (!supabaseUrl || !supabaseKey) {
+        console.warn('CRITICAL: Supabase Environment Variables are missing. Backend features will be disabled. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your deployment environment.');
 
-// Fallback to empty strings to prevent createClient from crashing if vars are missing, 
-// though downstream API calls will still fail and be caught by the service layer.
-export const supabase = createClient(supabaseUrl || '', supabaseKey || '');
+        // Return a proxy that swallows calls but warns the developer
+        return new Proxy({} as any, {
+            get: (_, prop) => {
+                return () => {
+                    console.error(`Supabase call to ".${String(prop)}" failed: Client not initialized due to missing environment variables.`);
+                    return { from: () => ({ select: () => ({ order: () => ({ eq: () => ({ single: () => Promise.resolve({ data: null, error: new Error('Supabase not initialized') }) }) }) }) }) };
+                };
+            }
+        });
+    }
+    return createClient(supabaseUrl, supabaseKey);
+};
+
+export const supabase = getSupabaseClient();
