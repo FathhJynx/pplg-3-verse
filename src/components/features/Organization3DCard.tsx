@@ -81,7 +81,7 @@ const Organization3DCard = ({ role, isActive, onClick }: Organization3DCardProps
                 perspective: 1000,
                 zIndex: isActive ? 50 : 1,
             }}
-            className={`relative cursor-pointer transition-all duration-500 ${isActive ? "scale-110" : "scale-100 hover:scale-105"} ${!isInView ? 'opacity-0' : 'opacity-100'}`}
+            className={`relative cursor-pointer transition-all duration-500 ${isActive ? "scale-110" : "scale-100 hover:scale-105"}`}
             onMouseMove={onMouseMove}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={onMouseLeave}

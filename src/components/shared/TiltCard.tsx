@@ -72,7 +72,7 @@ const TiltCard: React.FC<TiltCardProps> = ({ children, className = '', onClick }
     return (
         <animated.div
             ref={ref}
-            className={`relative transition-all duration-300 ${className} ${!isInView ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}
+            className={`relative ${className}`}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
             onTouchStart={handleTouchStart}
@@ -83,10 +83,11 @@ const TiltCard: React.FC<TiltCardProps> = ({ children, className = '', onClick }
                 transform: props.xys.to(trans),
                 zIndex: isHovered ? 50 : 1,
                 transformStyle: 'preserve-3d',
-                willChange: 'transform' // hint for browser optimization
+                willChange: 'transform',
+                transition: 'opacity 0.3s ease, transform 0.1s ease' // more specific than transition-all
             }}
         >
-            {isInView && children}
+            {children}
             {/* Dynamic Glare effect - only rendered when hovered */}
             {isHovered && (
                 <>
