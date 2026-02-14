@@ -1,6 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
 @layer base {
   :root {
@@ -52,7 +52,7 @@
     --gradient-glow: linear-gradient(90deg, transparent 0%, hsl(120 100% 50% / 0.3) 50%, transparent 100%);
 
     /* Typography */
-    --font-display: 'Orbitron', sans-serif;
+    --font-display: 'Orbitron', 'Chakra Petch', sans-serif;
     --font-body: 'Rajdhani', sans-serif;
 
     /* Shadows */
@@ -73,81 +73,89 @@
 
 @layer base {
   * {
-    @apply border-border;
+    border-color: hsl(var(--border));
   }
 
   body {
-    @apply bg-background text-foreground;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
     font-family: var(--font-body);
+    cursor: default;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-display);
+  }
+
+  /* Smooth selection */
+  ::selection {
+    background: hsl(var(--primary) / 0.3);
+    color: hsl(var(--foreground));
   }
 }
 
 @layer utilities {
-  /* Glitch effect */
+
+  /* Lenis Smooth Scroll Recommended Styles */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  .lenis.lenis-scrolling iframe {
+    pointer-events: none;
+  }
+
+  /* Glitch effect (Legacy/Fallback) */
   .glitch {
     position: relative;
     animation: glitch 2s infinite;
   }
 
-  .glitch::before,
-  .glitch::after {
-    content: attr(data-text);
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-
-  .glitch::before {
-    animation: glitch-1 0.3s infinite;
-    color: hsl(var(--primary));
-    z-index: -1;
-  }
-
-  .glitch::after {
-    animation: glitch-2 0.3s infinite;
-    color: hsl(var(--secondary));
-    z-index: -2;
-  }
-
-  @keyframes glitch {
-    0%, 100% { transform: translate(0); }
-    20% { transform: translate(-2px, 2px); }
-    40% { transform: translate(-2px, -2px); }
-    60% { transform: translate(2px, 2px); }
-    80% { transform: translate(2px, -2px); }
-  }
-
-  @keyframes glitch-1 {
-    0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
-    20% { clip-path: inset(20% 0 60% 0); transform: translate(-3px); }
-    40% { clip-path: inset(40% 0 40% 0); transform: translate(3px); }
-    60% { clip-path: inset(60% 0 20% 0); transform: translate(-3px); }
-    80% { clip-path: inset(80% 0 0 0); transform: translate(3px); }
-  }
-
-  @keyframes glitch-2 {
-    0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
-    20% { clip-path: inset(80% 0 0 0); transform: translate(3px); }
-    40% { clip-path: inset(60% 0 20% 0); transform: translate(-3px); }
-    60% { clip-path: inset(40% 0 40% 0); transform: translate(3px); }
-    80% { clip-path: inset(20% 0 60% 0); transform: translate(-3px); }
-  }
+  /* ... keeping simplified old styles for compatibility if needed ... */
 
   /* Neon text glow */
   .text-neon {
     text-shadow: 0 0 10px hsl(var(--primary)), 0 0 20px hsl(var(--primary)), 0 0 40px hsl(var(--primary));
   }
 
+  /* Hover effects */
+  .hover-glow {
+    transition: all 0.3s ease;
+  }
+
+  .hover-glow:hover {
+    text-shadow: 0 0 10px hsl(var(--primary)), 0 0 20px hsl(var(--primary));
+    color: hsl(var(--foreground));
+  }
+
   /* Cyber border */
   .cyber-border {
     position: relative;
     border: 1px solid hsl(var(--primary) / 0.5);
+    transition: all 0.3s ease;
+  }
+
+  .cyber-border:hover {
+    border-color: hsl(var(--primary));
+    box-shadow: 0 0 15px hsl(var(--primary) / 0.3);
   }
 
   .cyber-border::before {
@@ -160,97 +168,49 @@
     background: linear-gradient(45deg, hsl(var(--primary)) 0%, transparent 50%, hsl(var(--secondary)) 100%);
     z-index: -1;
     opacity: 0.3;
+    transition: opacity 0.3s ease;
+  }
+
+  .cyber-border:hover::before {
+    opacity: 0.6;
   }
 
   /* Scanline effect */
   .scanlines::after {
     content: '';
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      hsl(0 0% 0% / 0.1) 2px,
-      hsl(0 0% 0% / 0.1) 4px
-    );
+    background: repeating-linear-gradient(0deg,
+        transparent,
+        transparent 2px,
+        hsl(0 0% 0% / 0.05) 2px,
+        hsl(0 0% 0% / 0.05) 4px);
+    pointer-events: none;
+    z-index: 9999;
     pointer-events: none;
   }
 
-  /* Floating animation */
-  .float {
-    animation: float 6s ease-in-out infinite;
+  /* Custom Cursor - Optional "Game" feel */
+  /* If user wants a completely custom cursor, we'd use a generic div, but simple CSS helps */
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
   }
 
-  @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-20px); }
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--deep-black));
   }
 
-  /* Pulse glow */
-  .pulse-glow {
-    animation: pulse-glow 2s ease-in-out infinite;
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary) / 0.5);
+    border-radius: 4px;
   }
 
-  @keyframes pulse-glow {
-    0%, 100% { box-shadow: 0 0 20px hsl(var(--primary) / 0.3); }
-    50% { box-shadow: 0 0 40px hsl(var(--primary) / 0.6), 0 0 60px hsl(var(--primary) / 0.4); }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--primary));
   }
-
-  /* Clip corners */
-  .clip-corners {
-    clip-path: polygon(
-      0 10px, 10px 0,
-      calc(100% - 10px) 0, 100% 10px,
-      100% calc(100% - 10px), calc(100% - 10px) 100%,
-      10px 100%, 0 calc(100% - 10px)
-    );
-  }
-
-  .clip-corners-lg {
-    clip-path: polygon(
-      0 20px, 20px 0,
-      calc(100% - 20px) 0, 100% 20px,
-      100% calc(100% - 20px), calc(100% - 20px) 100%,
-      20px 100%, 0 calc(100% - 20px)
-    );
-  }
-
-  /* Diagonal stripes */
-  .diagonal-stripes {
-    background: repeating-linear-gradient(
-      45deg,
-      transparent,
-      transparent 10px,
-      hsl(var(--primary) / 0.05) 10px,
-      hsl(var(--primary) / 0.05) 20px
-    );
-  }
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: hsl(var(--deep-black));
-}
-
-::-webkit-scrollbar-thumb {
-  background: hsl(var(--primary) / 0.5);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--primary));
-}
-
-/* Selection */
-::selection {
-  background: hsl(var(--primary) / 0.3);
-  color: hsl(var(--foreground));
 }

@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import GlitchText from "./GlitchText";
+import GlitchText from "../shared/GlitchText";
+import { siteConfig } from "@/config/site";
 
 const Footer = () => {
   return (
@@ -18,7 +19,7 @@ const Footer = () => {
             className="mb-6"
           >
             <GlitchText
-              text="XII PPLG 3"
+              text={siteConfig.name}
               as="h2"
               className="text-4xl md:text-6xl font-bold text-primary"
             />
@@ -32,14 +33,11 @@ const Footer = () => {
             transition={{ delay: 0.2 }}
             className="space-y-2 mb-8"
           >
-            <p className="text-lg font-display font-semibold text-foreground">
-              SMKN 4 TASIKMALAYA
+            <p className="text-lg font-display font-semibold text-foreground uppercase">
+              {siteConfig.school}
             </p>
-            <p className="text-sm font-body text-muted-foreground">
-              Jl. Tamansari No. 1, Tamansari, Kec. Tamansari
-            </p>
-            <p className="text-sm font-body text-muted-foreground">
-              Kota Tasikmalaya, Jawa Barat 46196
+            <p className="text-sm font-body text-muted-foreground whitespace-pre-line">
+              {siteConfig.address}
             </p>
           </motion.div>
 
@@ -57,8 +55,8 @@ const Footer = () => {
             <p className="text-xs font-body text-muted-foreground tracking-wider uppercase">
               Pengembangan Perangkat Lunak dan Gim
             </p>
-            <p className="text-xs font-body text-muted-foreground">
-              Angkatan 2023 • Cohort XII
+            <p className="text-xs font-body text-muted-foreground uppercase">
+              Angkatan {siteConfig.cohort} • Cohort {siteConfig.name.split(' ')[0]}
             </p>
           </motion.div>
 
@@ -78,12 +76,12 @@ const Footer = () => {
             </div>
 
             <p className="text-xs font-body text-muted-foreground">
-              © 2023-2024 XII PPLG 3. All rights reserved.
+              © {siteConfig.yearRange} {siteConfig.name}. All rights reserved.
             </p>
 
             <div className="flex items-center gap-4">
               <span className="text-xs font-display text-primary tracking-wider">
-                v1.0.0
+                v{siteConfig.version}
               </span>
             </div>
           </motion.div>

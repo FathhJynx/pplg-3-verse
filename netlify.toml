@@ -1,0 +1,6 @@
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# No functions or redirects needed for Pure Supabase

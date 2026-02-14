@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
-import LoadingScreen from "@/components/LoadingScreen";
-import HeroSection from "@/components/HeroSection";
-import TeacherSpotlight from "@/components/TeacherSpotlight";
-import OrganizationSection from "@/components/OrganizationSection";
-import StudentRoster from "@/components/StudentRoster";
-import Footer from "@/components/Footer";
+import LoadingScreen from "@/components/layout/LoadingScreen";
+import HeroSection from "@/components/features/HeroSection";
+import TeacherSpotlight from "@/components/features/TeacherSpotlight";
+import OrganizationSection from "@/components/features/OrganizationSection";
+import StudentRoster from "@/components/features/StudentRoster";
+import GallerySection from "@/components/features/GallerySection";
+import ChatSection from "@/components/features/ChatSection";
+import Footer from "@/components/layout/Footer";
 
 const Index = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -23,10 +25,14 @@ const Index = () => {
         <TeacherSpotlight />
         <OrganizationSection />
         <StudentRoster />
+        <GallerySection />
+        <ChatSection />
         <Footer />
       </div>
     </>
   );
+
+
 };
 
 export default Index;

@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
+import { siteConfig } from "@/config/site";
 
 interface LoadingScreenProps {
   onComplete: () => void;
@@ -21,7 +22,7 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
     const interval = setInterval(() => {
       setProgress((prev) => {
         const newProgress = prev + Math.random() * 15 + 5;
-        
+
         if (newProgress >= 100) {
           clearInterval(interval);
           setStatus("SYSTEM READY");
@@ -32,7 +33,7 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
         // Update status based on progress
         const statusIndex = Math.floor((newProgress / 100) * (statuses.length - 1));
         setStatus(statuses[statusIndex]);
-        
+
         return newProgress;
       });
     }, 200);
@@ -48,7 +49,7 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
     >
       {/* Background grid */}
       <div className="absolute inset-0 bg-grid-pattern bg-grid opacity-20" />
-      
+
       {/* Animated circles */}
       <motion.div
         className="absolute w-96 h-96 border border-primary/20 rounded-full"
@@ -76,10 +77,10 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
           className="mb-8"
         >
           <h1 className="text-5xl md:text-7xl font-display font-black text-primary text-neon tracking-wider">
-            XII PPLG 3
+            {siteConfig.name}
           </h1>
-          <p className="text-sm font-body text-muted-foreground tracking-[0.3em] mt-2">
-            SMKN 4 TASIKMALAYA
+          <p className="text-sm font-body text-muted-foreground tracking-[0.3em] mt-2 uppercase">
+            {siteConfig.school}
           </p>
         </motion.div>
 
