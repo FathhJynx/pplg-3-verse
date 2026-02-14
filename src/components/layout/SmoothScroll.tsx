@@ -12,7 +12,6 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
             lerp: 0.1, // Improved momentum
             smoothWheel: true,
             syncTouch: true, // Sync with touch momentum
-            smoothTouch: true, // Enable for mobile
             touchMultiplier: 1.5, // Slightly more responsive
             wheelMultiplier: 1,
             infinite: false,
