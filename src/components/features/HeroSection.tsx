@@ -74,14 +74,16 @@ const HeroSection = () => {
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 1, type: "spring" }}
-            className="text-4xl sm:text-6xl md:text-8xl font-display font-black tracking-tight relative z-10"
+            className="text-4xl sm:text-6xl md:text-8xl font-display font-black tracking-tight relative z-10 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4"
           >
             <div className="relative inline-block">
               <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-zinc-500 absolute inset-0 transform translate-x-1 translate-y-1 opacity-30 blur-sm">PPLG</span>
               <span className="text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">PPLG</span>
             </div>
-            <span className="mx-2 sm:mx-4 text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-500 to-cyan-500 animate-gradient-x bg-[length:200%_auto]">3</span>
-            <span className="text-cyan-400 font-outline-1 sm:font-outline-2 md:font-outline-3">VERSE</span>
+            <div className="flex items-center gap-2 sm:gap-4">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-500 to-cyan-500 animate-gradient-x bg-[length:200%_auto]">3</span>
+              <span className="text-cyan-400 font-outline-1 sm:font-outline-2 md:font-outline-3">VERSE</span>
+            </div>
           </motion.h1>
 
           <motion.div

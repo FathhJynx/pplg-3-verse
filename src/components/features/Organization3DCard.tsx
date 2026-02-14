@@ -81,7 +81,7 @@ const Organization3DCard = ({ role, isActive, onClick }: Organization3DCardProps
                 perspective: 1000,
                 zIndex: isActive ? 50 : 1,
             }}
-            className={`relative cursor-pointer transition-all duration-500 ${isActive ? "scale-110" : "scale-100 hover:scale-105"}`}
+            className={`relative cursor-pointer transition-all duration-500 ${isActive ? "scale-105 sm:scale-110" : "scale-100 hover:scale-105"}`}
             onMouseMove={onMouseMove}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={onMouseLeave}
@@ -94,7 +94,7 @@ const Organization3DCard = ({ role, isActive, onClick }: Organization3DCardProps
                     rotateY: isActive ? 0 : rotateY,
                     transformStyle: "preserve-3d",
                 }}
-                className={`w-72 h-96 relative bg-card border-2 ${styles.border} ${isActive ? styles.glow : ""} rounded-xl backdrop-blur-sm transition-colors duration-300`}
+                className={`w-64 sm:w-72 h-[22rem] sm:h-96 relative bg-card border-2 ${styles.border} ${isActive ? styles.glow : ""} rounded-xl backdrop-blur-sm transition-colors duration-300`}
                 animate={{
                     boxShadow: (isActive || hovered) && isInView
                         ? `0 0 40px ${role.tier === 'gold' ? 'rgba(234,179,8,0.4)' : role.tier === 'silver' ? 'rgba(156,163,175,0.4)' : 'rgba(234,88,12,0.4)'}`

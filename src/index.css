@@ -76,11 +76,21 @@
     border-color: hsl(var(--border));
   }
 
+  html {
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    width: 100%;
+    max-width: 100vw;
+  }
+
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
     font-family: var(--font-body);
     cursor: default;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
   }
 
   h1,

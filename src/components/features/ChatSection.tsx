@@ -87,10 +87,16 @@ const ChatSection = () => {
         return () => clearInterval(interval);
     }, [isLoggedIn]);
 
+    const isInitialMount = useRef(true);
+
     useEffect(() => {
         // Only auto-scroll when new messages arrive if logged in
-        // This prevents the page from jumping to footer during initial boot sequence
+        // and NOT on the initial mount to prevent jumps
         if (isLoggedIn && messages.length > 0) {
+            if (isInitialMount.current) {
+                isInitialMount.current = false;
+                return;
+            }
             scrollToBottom();
         }
     }, [messages.length, isLoggedIn]);
