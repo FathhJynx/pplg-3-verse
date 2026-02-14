@@ -9,7 +9,7 @@ const Stars = (props: any) => {
     const [sphere] = useMemo(() => {
         try {
             // Generate random points in a sphere
-            const positions = random.inSphere(new Float32Array(8000), { radius: 2 }) as Float32Array;
+            const positions = random.inSphere(new Float32Array(3000), { radius: 2 }) as Float32Array;
             // Validate that we don't have NaN values which crash Three.js
             for (let i = 0; i < positions.length; i++) {
                 if (isNaN(positions[i])) positions[i] = 0;
@@ -17,7 +17,7 @@ const Stars = (props: any) => {
             return [positions];
         } catch (e) {
             console.error("Error generating stars:", e);
-            return [new Float32Array(8000).fill(0)];
+            return [new Float32Array(3000).fill(0)];
         }
     }, []);
 
@@ -27,8 +27,8 @@ const Stars = (props: any) => {
             ref.current.rotation.y -= delta / 20;
 
             // Mouse interaction (parallax)
-            const x = state.pointer.x * 0.2;
-            const y = state.pointer.y * 0.2;
+            const x = state.pointer.x * 0.1; // Reduced parallax intensity for weight
+            const y = state.pointer.y * 0.1;
             ref.current.rotation.x += (y - ref.current.rotation.x) * delta * 0.5;
             ref.current.rotation.y += (x - ref.current.rotation.y) * delta * 0.5;
         }
@@ -40,7 +40,7 @@ const Stars = (props: any) => {
                 <PointMaterial
                     transparent
                     color="#00ff00" // Neon green
-                    size={0.003} // Increased size
+                    size={0.002} // Slightly smaller points for elegance
                     sizeAttenuation={true}
                     depthWrite={false}
                     blending={THREE.AdditiveBlending}
@@ -55,16 +55,16 @@ const CyberShape = () => {
 
     useFrame((state, delta) => {
         if (meshRef.current) {
-            meshRef.current.rotation.x += delta * 0.2;
-            meshRef.current.rotation.y += delta * 0.3;
+            meshRef.current.rotation.x += delta * 0.1; // Slower rotation
+            meshRef.current.rotation.y += delta * 0.15;
         }
     });
 
     return (
-        <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
-            <mesh ref={meshRef} position={[0, 0, 0]} scale={0.8}>
+        <Float speed={1.5} rotationIntensity={0.3} floatIntensity={0.5}>
+            <mesh ref={meshRef} position={[0, 0, 0]} scale={0.7}>
                 <icosahedronGeometry args={[1, 0]} />
-                <meshBasicMaterial color="#00ff00" wireframe transparent opacity={0.15} />
+                <meshBasicMaterial color="#00ff00" wireframe transparent opacity={0.1} />
             </mesh>
         </Float>
     );
@@ -73,15 +73,15 @@ const CyberShape = () => {
 const Background3D = () => {
     return (
         <div className="fixed inset-0 z-[-1] bg-gradient-to-b from-black via-zinc-950 to-black pointer-events-none">
-            <Canvas camera={{ position: [0, 0, 1] }}>
+            <Canvas camera={{ position: [0, 0, 1] }} dpr={[1, 2]}> {/* Added DPR limit */}
                 <fog attach="fog" args={['#000000', 1, 3]} />
                 <Stars />
                 <Sparkles
-                    count={500}
+                    count={200}
                     scale={3}
                     size={2}
-                    speed={0.4}
-                    opacity={0.5}
+                    speed={0.3}
+                    opacity={0.4}
                     color="#4ade80" // lighter green
                 />
                 <CyberShape />

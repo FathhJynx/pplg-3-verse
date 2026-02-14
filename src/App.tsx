@@ -7,6 +7,7 @@ import { Suspense, lazy } from "react";
 import SmoothScroll from "./components/layout/SmoothScroll";
 import Background3D from "./components/layout/Background3D";
 import LoadingScreen from "./components/layout/LoadingScreen";
+import ScrollToTop from "./components/layout/ScrollToTop";
 
 // Lazy load pages for better performance
 const Index = lazy(() => import("./pages/Index"));
@@ -25,6 +26,7 @@ const App = () => (
       <Background3D />
       <SmoothScroll>
         <BrowserRouter>
+          <ScrollToTop />
           <Suspense fallback={<LoadingScreen onComplete={() => { }} />}>
             <Routes>
               <Route path="/" element={<Index />} />

@@ -88,8 +88,12 @@ const ChatSection = () => {
     }, [isLoggedIn]);
 
     useEffect(() => {
-        scrollToBottom();
-    }, [messages.length, terminalLines.length]);
+        // Only auto-scroll when new messages arrive if logged in
+        // This prevents the page from jumping to footer during initial boot sequence
+        if (isLoggedIn && messages.length > 0) {
+            scrollToBottom();
+        }
+    }, [messages.length, isLoggedIn]);
 
     const handleAuth = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -200,7 +204,6 @@ const ChatSection = () => {
                                             onChange={e => setUsername(e.target.value)}
                                             className="bg-transparent border-none outline-none text-green-400 w-full placeholder-green-500/20"
                                             placeholder="enter_username"
-                                            autoFocus
                                         />
                                     </div>
                                 </div>
@@ -284,7 +287,6 @@ const ChatSection = () => {
                                 onChange={(e) => setNewMessage(e.target.value)}
                                 className="flex-1 bg-transparent border-none outline-none text-green-300 placeholder-green-500/20 font-mono"
                                 placeholder="echo 'your message' > broadcast"
-                                autoFocus
                             />
                             {newMessage && (
                                 <span className="animate-pulse w-2 h-4 bg-green-500 block" />
