@@ -18,7 +18,9 @@ const Menfess = () => {
         setLoading(true);
         try {
             const data = await api.getMenfess();
-            setMenfesses(data);
+            // Ensure descending order by date
+            const sortedData = data.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+            setMenfesses(sortedData);
         } catch (error) {
             console.error(error);
         } finally {
@@ -54,14 +56,14 @@ const Menfess = () => {
                         <span className="text-xs tracking-widest uppercase font-bold">Return to_Base</span>
                     </button>
 
-                    <div className="flex flex-col md:flex-row justify-between items-end gap-8">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
                         <div>
                             <div className="flex items-center gap-2 text-primary mb-2">
                                 <Radio className="w-4 h-4 animate-pulse" />
                                 <span className="text-xs tracking-widest uppercase">Encrypted Transmission Protocol</span>
                             </div>
 
-                            <h1 className="text-3xl sm:text-4xl md:text-7xl font-display font-bold mb-4 text-white">
+                            <h1 className="text-4xl md:text-7xl font-display font-bold mb-4 text-white">
                                 <GlitchText text="SONG_FESS" />
                             </h1>
                             <p className="text-zinc-400 max-w-xl text-sm border-l-2 border-primary/50 pl-4 py-1">
@@ -96,42 +98,47 @@ const Menfess = () => {
                         </div>
                     </div>
                 </div>
-            </header>
+            </header >
 
             {/* Feed Section */}
-            <main className="max-w-7xl mx-auto px-4 py-12">
-                {loading ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {[1, 2, 3, 4, 5, 6].map(i => (
-                            <div key={i} className="h-64 bg-zinc-900/50 rounded-lg animate-pulse border border-white/5 relative overflow-hidden">
-                                <div className="absolute top-0 left-0 w-full h-1 bg-primary/20 animate-scan" />
-                            </div>
-                        ))}
-                    </div>
-                ) : (
-                    <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
-                        <AnimatePresence>
-                            {filteredMenfesses.map((item, index) => (
-                                <MenfessCard key={item.id} item={item} index={index} onClick={() => navigate(`/menfess/${item.id}`)} />
-                            ))}
-                        </AnimatePresence>
-                    </div>
-                )}
+            < main className="max-w-7xl mx-auto px-4 py-12" >
+                {
+                    loading ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" >
+                            {
+                                [1, 2, 3, 4, 5, 6].map(i => (
+                                    <div key={i} className="h-64 bg-zinc-900/50 rounded-lg animate-pulse border border-white/5 relative overflow-hidden">
+                                        <div className="absolute top-0 left-0 w-full h-1 bg-primary/20 animate-scan" />
+                                    </div>
+                                ))
+                            }
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
+                            <AnimatePresence>
+                                {filteredMenfesses.map((item, index) => (
+                                    <MenfessCard key={item.id} item={item} index={index} onClick={() => navigate(`/menfess/${item.id}`)} />
+                                ))}
+                            </AnimatePresence>
+                        </div>
+                    )}
 
-                {!loading && filteredMenfesses.length === 0 && (
-                    <div className="text-center py-20 border border-dashed border-zinc-800 rounded-lg">
-                        <Terminal className="w-12 h-12 text-zinc-700 mx-auto mb-4" />
-                        <p className="text-zinc-500 font-mono">NO SIGNALS DETECTED MATCHING QUERY</p>
-                    </div>
-                )}
-            </main>
+                {
+                    !loading && filteredMenfesses.length === 0 && (
+                        <div className="text-center py-20 border border-dashed border-zinc-800 rounded-lg">
+                            <Terminal className="w-12 h-12 text-zinc-700 mx-auto mb-4" />
+                            <p className="text-zinc-500 font-mono">NO SIGNALS DETECTED MATCHING QUERY</p>
+                        </div>
+                    )
+                }
+            </main >
 
             <CreateMenfessModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 onSuccess={fetchMenfess}
             />
-        </div>
+        </div >
     );
 };
 

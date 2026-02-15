@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { Shield, Users, FileText, Coins, Hexagon, Terminal } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import Organization3DCard from "./Organization3DCard";
@@ -77,12 +77,7 @@ const OrganizationSection = () => {
     fetchRoles();
   }, []);
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
 
-  const x = useTransform(scrollYProgress, [0, 1], [-50, 50]);
 
   return (
     <section
@@ -114,8 +109,7 @@ const OrganizationSection = () => {
         />
 
         {/* 3D Card Stage */}
-        <motion.div
-          style={{ x }}
+        <div
           className="flex flex-wrap justify-center items-center gap-8 perspective-1000"
         >
           {loading ? (
@@ -124,10 +118,10 @@ const OrganizationSection = () => {
             orgRoles.map((role, index) => (
               <motion.div
                 key={role.title}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="relative"
               >
                 {/* Connecting lines illusion could go here */}
@@ -139,7 +133,7 @@ const OrganizationSection = () => {
               </motion.div>
             ))
           )}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

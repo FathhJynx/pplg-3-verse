@@ -65,7 +65,7 @@ const StudentDetail = () => {
             <div className="absolute bottom-0 left-0 w-2/3 h-2/3 bg-blue-500/5 rounded-full blur-[150px] pointer-events-none" />
             <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:50px_50px] pointer-events-none opacity-20" />
 
-            <div className="max-w-7xl mx-auto px-4 py-8 relative z-10">
+            <div className="max-w-7xl mx-auto px-4 py-8 pb-20 relative z-10">
                 <button
                     onClick={() => navigate('/')}
                     className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors mb-8 group"
@@ -97,7 +97,7 @@ const StudentDetail = () => {
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
 
                             <div className="absolute bottom-6 left-6">
-                                <h1 className="text-6xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-white/50">
+                                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-white/50 break-words">
                                     {student.nickname.toUpperCase()}
                                 </h1>
                                 <p className="font-mono text-primary tracking-widest text-sm mt-2">{student.role === 'Siswa' ? 'OPERATOR' : student.role.toUpperCase()}</p>
@@ -129,7 +129,7 @@ const StudentDetail = () => {
                                 transition={{ delay: 0.2 }}
                             >
                                 <h2 className="text-sm font-mono text-primary mb-2 tracking-widest">FULL IDENTITY</h2>
-                                <div className="text-4xl md:text-5xl font-display font-bold leading-tight mb-6">
+                                <div className="text-3xl md:text-5xl font-display font-bold leading-tight mb-6">
                                     {student.full_name}
                                 </div>
 

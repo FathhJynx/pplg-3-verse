@@ -85,7 +85,7 @@ const CreateMenfessModal = ({ isOpen, onClose, onSuccess }: CreateMenfessModalPr
                     </button>
                 </div>
 
-                <div className="p-6 relative">
+                <div className="p-4 sm:p-6 relative">
                     {/* Decorative lines */}
                     <div className="absolute top-0 left-6 w-px h-full bg-white/5 pointer-events-none" />
 
@@ -142,7 +142,7 @@ const CreateMenfessModal = ({ isOpen, onClose, onSuccess }: CreateMenfessModalPr
                                                 value={message}
                                                 onChange={e => setMessage(e.target.value)}
                                                 placeholder="Enter transmission content..."
-                                                className="w-full h-32 bg-white/5 border border-white/10 rounded p-3 text-sm text-white focus:border-primary outline-none resize-none font-mono leading-relaxed"
+                                                className="w-full h-32 bg-white/5 border border-white/10 rounded p-3 text-base sm:text-sm text-white focus:border-primary outline-none resize-none font-mono leading-relaxed"
                                             />
                                             <div className="absolute bottom-2 right-2 text-[10px] text-zinc-600 font-mono">
                                                 {message.length} CHARS
@@ -164,7 +164,7 @@ const CreateMenfessModal = ({ isOpen, onClose, onSuccess }: CreateMenfessModalPr
                                         </div>
                                     )}
 
-                                    <div className="flex gap-3 pt-4">
+                                    <div className="flex flex-col sm:flex-row gap-3 pt-4">
                                         <button
                                             onClick={() => setStep('music')}
                                             className="px-4 py-2 border border-dashed border-zinc-700 hover:border-primary text-zinc-500 hover:text-primary rounded text-xs font-mono flex items-center gap-2 transition-all uppercase tracking-wider"

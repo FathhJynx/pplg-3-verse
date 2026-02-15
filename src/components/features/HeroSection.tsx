@@ -1,6 +1,6 @@
 
 import { motion, useScroll, useTransform, useSpring, useMotionValue } from "framer-motion";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Music, Zap, Triangle, Circle, Hexagon } from "lucide-react";
 import GlitchText from "../shared/GlitchText";
@@ -11,6 +11,15 @@ import { siteConfig } from "@/config/site";
 const HeroSection = () => {
   const navigate = useNavigate();
   const sectionRef = useRef<HTMLElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"],
@@ -28,6 +37,7 @@ const HeroSection = () => {
   const rotateY = useTransform(mouseX, [-0.5, 0.5], [-10, 10]);
 
   const handleMouseMove = (e: React.MouseEvent) => {
+    if (isMobile) return;
     const { clientX, clientY, currentTarget } = e;
     const { width, height, left, top } = currentTarget.getBoundingClientRect();
     mouseX.set((clientX - left) / width - 0.5);
@@ -54,8 +64,13 @@ const HeroSection = () => {
 
       {/* Hero Content */}
       <motion.div
-        style={{ y, opacity, rotateX, rotateY }}
-        className="relative z-10 text-center px-4 max-w-5xl"
+        style={{
+          y: isMobile ? 0 : y,
+          opacity,
+          rotateX: isMobile ? 0 : rotateX,
+          rotateY: isMobile ? 0 : rotateY
+        }}
+        className="relative z-10 text-center px-4 max-w-5xl pt-20 pb-10 md:pt-0 md:pb-0"
       >
         {/* Overhead HUD Elements */}
         <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-px h-24 bg-gradient-to-b from-transparent to-primary/50" />

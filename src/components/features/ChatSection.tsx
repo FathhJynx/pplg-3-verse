@@ -155,12 +155,12 @@ const ChatSection = () => {
     };
 
     return (
-        <section className="py-12 px-4 bg-zinc-950 font-mono relative overflow-hidden min-h-[800px] flex flex-col items-center">
+        <section className="py-12 px-4 bg-zinc-950 font-mono relative overflow-hidden min-h-[100dvh] md:min-h-[800px] flex flex-col items-center">
             {/* CRT Scanline Effect */}
             <div className="absolute inset-0 pointer-events-none z-50 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,3px_100%] pointer-events-none" />
 
             {/* Main Terminal Window */}
-            <div className="w-full max-w-5xl bg-black border border-green-500/30 rounded-lg shadow-[0_0_20px_rgba(0,255,0,0.1)] overflow-hidden flex flex-col h-[700px] relative z-10">
+            <div className="w-full max-w-5xl bg-black border border-green-500/30 rounded-lg shadow-[0_0_20px_rgba(0,255,0,0.1)] overflow-hidden flex flex-col h-[75vh] md:h-[700px] relative z-10">
 
                 {/* Terminal Header */}
                 <div className="bg-zinc-900 border-b border-green-500/20 p-2 flex items-center gap-4 px-4">
@@ -169,7 +169,7 @@ const ChatSection = () => {
                         <div className="w-3 h-3 rounded-full bg-yellow-500/50" />
                         <div className="w-3 h-3 rounded-full bg-green-500/50" />
                     </div>
-                    <div className="flex-1 text-center text-xs text-green-500/50 font-bold tracking-widest uppercase">
+                    <div className="flex-1 text-center text-xs text-green-500/50 font-bold tracking-widest uppercase truncate px-2">
                         root@PPLG3_NEXUS:~/encrypted_uplink
                     </div>
                     {isLoggedIn && (
@@ -284,7 +284,7 @@ const ChatSection = () => {
                 {isLoggedIn && (
                     <div className="bg-zinc-900 border-t border-green-500/20 p-3">
                         <form onSubmit={handleSend} className="flex items-center gap-2">
-                            <span className="text-green-500 font-bold shrink-0">
+                            <span className="text-green-500 font-bold shrink-0 hidden sm:block">
                                 {username}@nexus:~$
                             </span>
                             <input

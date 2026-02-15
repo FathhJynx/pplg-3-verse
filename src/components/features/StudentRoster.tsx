@@ -11,6 +11,7 @@ const StudentRoster = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(true);
+  const [visibleCount, setVisibleCount] = useState(10);
   const navigate = useNavigate();
 
   const { scrollYProgress } = useScroll({
@@ -63,7 +64,7 @@ const StudentRoster = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 px-2 sm:px-4 perspective-1000">
-            {students.map((student, index) => {
+            {students.slice(0, visibleCount).map((student, index) => {
               const Icon = getSpecialtyIcon(student.specialty);
               return (
                 <TiltCard key={student.id} onClick={() => navigate(`/student/${student.id}`)} className="group">
@@ -116,6 +117,17 @@ const StudentRoster = () => {
                 </TiltCard>
               );
             })}
+          </div>
+        )}
+
+        {!loading && visibleCount < students.length && (
+          <div className="mt-12 flex justify-center">
+            <button
+              onClick={() => setVisibleCount((prev) => Math.min(prev + 10, students.length))}
+              className="px-6 py-2 bg-primary/10 text-primary border border-primary/30 rounded-full font-mono text-sm hover:bg-primary/20 transition-all active:scale-95"
+            >
+              LOAD MORE DATA [{students.length - visibleCount} REMAINING]
+            </button>
           </div>
         )}
       </div>

@@ -15,7 +15,8 @@ const ParticleVortex = () => {
         let height = canvas.height = window.innerHeight;
 
         const particles: { x: number; y: number; z: number; color: string }[] = [];
-        const particleCount = 200;
+        const isMobile = window.innerWidth < 768;
+        const particleCount = isMobile ? 60 : 200;
         const colors = ['#ff0099', '#00f3ff', '#ffffff'];
 
         for (let i = 0; i < particleCount; i++) {
