@@ -14,6 +14,7 @@ const Index = lazy(() => import("./pages/Index"));
 const StudentDetail = lazy(() => import("./pages/StudentDetail"));
 const Menfess = lazy(() => import("./pages/Menfess"));
 const MenfessDetail = lazy(() => import("./pages/MenfessDetail"));
+const RadioSection = lazy(() => import("./components/features/radio/RadioSection"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ const App = () => (
               <Route path="/student/:id" element={<StudentDetail />} />
               <Route path="/menfess" element={<Menfess />} />
               <Route path="/menfess/:id" element={<MenfessDetail />} />
+              <Route path="/radio" element={<RadioSection />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

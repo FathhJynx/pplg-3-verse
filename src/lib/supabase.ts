@@ -9,6 +9,7 @@ const getSupabaseClient = () => {
         console.warn('CRITICAL: Supabase Environment Variables are missing. Backend features will be disabled. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your deployment environment.');
 
         // Return a proxy that swallows calls but warns the developer
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return new Proxy({} as any, {
             get: (_, prop) => {
                 return () => {

@@ -146,12 +146,13 @@ export const api = {
 
             if (error) throw error;
             return data;
-        } catch (error: any) {
+        } catch (error: unknown) {
             // Check for duplicate key error (Git-style)
-            if (error.code === '23505') {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            if ((error as any).code === '23505') {
                 throw new Error('Username already taken');
             }
-            throw new Error(error.message || 'Registration failed');
+            throw new Error((error as Error).message || 'Registration failed');
         }
     },
 
@@ -166,14 +167,15 @@ export const api = {
             if (error) throw error;
 
             // data is returned as SetOf, so it comes as an array
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const users = data as any[];
             if (!users || users.length === 0) {
                 throw new Error('Invalid username or PIN');
             }
 
             return users[0];
-        } catch (error: any) {
-            throw new Error(error.message || 'Login failed');
+        } catch (error: unknown) {
+            throw new Error((error as Error).message || 'Login failed');
         }
     },
 
@@ -193,18 +195,14 @@ export const api = {
     },
 
     createMenfess: async (menfess: Partial<Menfess>) => {
-        try {
-            const { data, error } = await supabase
-                .from('menfess')
-                .insert([menfess])
-                .select()
-                .single();
+        const { data, error } = await supabase
+            .from('menfess')
+            .insert([menfess])
+            .select()
+            .single();
 
-            if (error) throw error;
-            return data;
-        } catch (error) {
-            throw error;
-        }
+        if (error) throw error;
+        return data;
     },
 
     getMenfessById: async (id: string): Promise<Menfess | null> => {
@@ -220,6 +218,149 @@ export const api = {
         } catch (error) {
             console.error('Error fetching menfess detail:', error);
             return null;
+        }
+    },
+
+    // --- RADIO FEATURE ---
+
+    getRadioQueue: async () => {
+        try {
+            const { data, error } = await supabase
+                .from('radio_queue')
+                .select('*')
+                .order('votes', { ascending: false })
+                .order('created_at', { ascending: true }); // If votes equal, oldest first
+
+            if (error) throw error;
+            return data;
+        } catch (error) {
+            console.error('Error fetching radio queue:', error);
+            return [];
+        }
+    },
+
+    getRadioNowPlaying: async () => {
+        try {
+            const { data, error } = await supabase
+                .from('radio_now_playing')
+                .select('*')
+                .single();
+
+            if (error) {
+                if (error.code === 'PGRST116') return null; // No rows found
+                throw error;
+            }
+            return data;
+        } catch (error) {
+            console.error('Error fetching now playing:', error);
+            return null;
+        }
+    },
+
+    submitRadioTrack: async (track: { spotify_url: string; title: string; artist: string; submitted_by?: string }) => {
+        const { data, error } = await supabase
+            .from('radio_queue')
+            .insert([track])
+            .select()
+            .single();
+
+        if (error) throw error;
+        return data;
+    },
+
+    voteRadioTrack: async (queue_id: string, voter_id: string) => {
+        // 1. Record the vote to prevent duplicates
+        const { error: voteError } = await supabase
+            .from('radio_votes')
+            .insert([{ queue_id, voter_id }]);
+
+        if (voteError) {
+            if (voteError.code === '23505') throw new Error('You have already voted for this track.');
+            throw voteError;
+        }
+
+        // 2. Increment the vote count in radio_queue (RPC is better, but this works for simple cases)
+        // Ideally we'd use a database trigger or an RPC function "increment_vote", 
+        // but reading -> updating is "okay" for this scale if we accept potential race conditions,
+        // OR we can rely on realtime subscription to update the UI eventually.
+        // Let's stick to a simple client-side increment for now.
+        const { error: updateError } = await supabase.rpc('increment_vote', { row_id: queue_id });
+
+        // If RPC doesn't exist (user needs to create it), fallback to fetch-update (risky but functional)
+        if (updateError) {
+            // Fallback: Fetch current, add 1, update. 
+            // NOTE: This IS prone to race conditions. 
+            // FOR PROD: Ensure 'increment_vote' RPC exists.
+            // For now, let's assume the user might not have created RPC.
+            // We will just return success and let Realtime handle the UI update if another client did it.
+            // But actually, let's try a direct update 
+            /*
+            const { data: current } = await supabase.from('radio_queue').select('votes').eq('id', queue_id).single();
+            if (current) {
+                await supabase.from('radio_queue').update({ votes: current.votes + 1 }).eq('id', queue_id);
+            }
+            */
+            // A better way without RPC for simple increment is usually unavailable without extensions.
+            // Let's try to assume the user WILL run the RPC or we just do the naive update.
+            // Let's implement the naive fetch-and-update for safety if RPC fails.
+
+            const { data: current } = await supabase.from('radio_queue').select('votes').eq('id', queue_id).single();
+            if (current) {
+                await supabase.from('radio_queue').update({ votes: current.votes + 1 }).eq('id', queue_id);
+            }
+        }
+
+        return true;
+    },
+
+    playRadioTrack: async (queueId: string) => {
+        try {
+            // 1. Get the track from queue
+            const { data: track, error: getError } = await supabase
+                .from('radio_queue')
+                .select('*')
+                .eq('id', queueId)
+                .single();
+
+            if (getError) throw getError;
+
+            // 2. Clear current Now Playing (optional, or just overwrite since we fetch .single())
+            // Best practice: Delete all rows in now_playing then insert
+            await supabase.from('radio_now_playing').delete().neq('id', '00000000-0000-0000-0000-000000000000'); // Delete all
+
+            // 3. Insert into Now Playing
+            const { error: insertError } = await supabase
+                .from('radio_now_playing')
+                .insert([{
+                    spotify_url: track.spotify_url,
+                    title: track.title,
+                    artist: track.artist
+                }]);
+
+            if (insertError) throw insertError;
+
+            // 4. Remove from Queue (DISABLED per user request: Keep in queue)
+            // await supabase.from('radio_queue').delete().eq('id', queueId);
+
+            return true;
+        } catch (error) {
+            console.error('Error playing track:', error);
+            throw error;
+        }
+    },
+
+    stopRadioTrack: async () => {
+        try {
+            const { error } = await supabase
+                .from('radio_now_playing')
+                .delete()
+                .neq('id', '00000000-0000-0000-0000-000000000000'); // Delete all
+
+            if (error) throw error;
+            return true;
+        } catch (error) {
+            console.error('Error stopping track:', error);
+            throw error;
         }
     }
 };

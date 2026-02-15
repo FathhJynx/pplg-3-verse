@@ -2,7 +2,7 @@
 import { motion, useScroll, useTransform, useSpring, useMotionValue } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Music, Zap, Triangle, Circle, Hexagon } from "lucide-react";
+import { Music, Zap, Triangle, Circle, Hexagon, Radio } from "lucide-react";
 import GlitchText from "../shared/GlitchText";
 import ParticleVortex from "../shared/ParticleVortex";
 import TiltCard from "../shared/TiltCard";
@@ -130,7 +130,7 @@ const HeroSection = () => {
               onClick={() => navigate('/menfess')}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="group relative px-8 py-4 bg-zinc-900 border border-primary/50 text-white font-mono text-sm tracking-widest overflow-hidden md:w-auto w-full"
+              className="group relative px-6 py-4 bg-zinc-900 border border-primary/50 text-white font-mono text-sm tracking-widest overflow-hidden md:w-auto w-full"
             >
               <div className="absolute inset-0 bg-primary/20 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-300 skew-x-12" />
               <div className="relative flex items-center justify-center gap-3">
@@ -140,6 +140,22 @@ const HeroSection = () => {
               {/* Corner Accents */}
               <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-primary" />
               <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-primary" />
+            </motion.button>
+
+            <motion.button
+              onClick={() => navigate('/radio')}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="group relative px-6 py-4 bg-zinc-900 border border-cyan-500/50 text-white font-mono text-sm tracking-widest overflow-hidden md:w-auto w-full"
+            >
+              <div className="absolute inset-0 bg-cyan-500/20 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-300 skew-x-12" />
+              <div className="relative flex items-center justify-center gap-3">
+                <Radio className="w-4 h-4 text-cyan-500 group-hover:text-white transition-colors" />
+                <span>INIT_RADIO_FREQUENCY</span>
+              </div>
+              {/* Corner Accents */}
+              <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-cyan-500" />
+              <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-cyan-500" />
             </motion.button>
 
             <motion.div

@@ -85,16 +85,28 @@ const Menfess = () => {
                                 <Search className="w-4 h-4 text-primary mr-3" />
                             </div>
 
-                            <button
-                                onClick={() => setIsModalOpen(true)}
-                                className="group relative bg-primary text-black font-bold py-3 px-6 rounded-lg overflow-hidden hover:scale-[1.02] transition-transform active:scale-95"
-                            >
-                                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                                <div className="relative flex items-center justify-center gap-2">
-                                    <Plus className="w-5 h-5" />
-                                    <span>INITIATE_UPLOAD</span>
-                                </div>
-                            </button>
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={() => navigate("/radio")}
+                                    className="group relative bg-zinc-900 border border-primary/50 text-white font-bold py-3 px-4 rounded-lg overflow-hidden hover:scale-[1.02] transition-transform active:scale-95"
+                                >
+                                    <div className="absolute inset-0 bg-primary/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+                                    <div className="relative flex items-center justify-center gap-2">
+                                        <Radio className="w-5 h-5 text-primary" />
+                                    </div>
+                                </button>
+
+                                <button
+                                    onClick={() => setIsModalOpen(true)}
+                                    className="group relative bg-primary text-black font-bold py-3 px-6 rounded-lg overflow-hidden hover:scale-[1.02] transition-transform active:scale-95 flex-1"
+                                >
+                                    <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+                                    <div className="relative flex items-center justify-center gap-2">
+                                        <Plus className="w-5 h-5" />
+                                        <span>INITIATE_UPLOAD</span>
+                                    </div>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
